@@ -12,7 +12,7 @@ class DB:
         file_data = structure_file_data(tags=tags, file_id=file_id)
         self._files.append(file_data)
 
-    async def get_files(self, tags):
+    def get_files(self, tags):
         """Ищет файлы с данными тегами"""
         for i, tag in enumerate(tags):  # Все теги - слова в нижнем регистре.
             tags[i] = tag.lower()

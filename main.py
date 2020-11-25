@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
+DB = DB()
 
 
 @dp.message_handler(commands=['start', 'help'])
@@ -21,37 +22,42 @@ async def send_welcome(message: types.Message):
 
 
 
-@dp.message_handler(content_types=['file', 'photo', 'video'])
+@dp.message_handler(content_types=['file', 'photo', 'video', 'document'])
 async def set_file(message: types.Message):
-    tags = message.text.split()
-    if message.document.file_id is not None:
-        save_file(message.document.file_id, tags)
+    # logging.INFO()
+    print(12)
+    try:
+        tags = message.text.split()
+    except AttributeError:
+        tags = [" "]
+    if message.document is not None:
+        DB.save_file(message.document.file_id, tags)
     elif message.photo is not None:
-        save_file(message.photo.file_id, tags)
+        print(message.photo)
+        # DB.save_file(message.photo.file_id, tags)
     elif message.video.file_id is not None:
-        save_file(message.video.file_id, tags)
+        DB.save_file(message.video.file_id, tags)
     # await message.answer(message.text)
 
 
-@dp.message_handler(types.Message)
+@dp.message_handler(commands=['get'])
 async def get_files_by_tag_name(message: types.Message):
     tags = message.text.split()
-    files = get_files(tags)
+    files = DB.get_files(tags)
     for file in files:
         bot.sendDocument(chat_id=message.sender_chat, document = file.file_id)
-    await get_files(tags)
+
 
 
 @dp.message_handler(commands=['delate'])
 async def delate_file(message: types.Message):
     tags = message.text.split()
-    files = get_files(tags)
+    files = DB.get_files(tags)
     for file in files:
         bot.sendDocument(chat_id=message.sender_chat, document = file.file_id)
-    await g
+    await 1
 
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 
-@d
