@@ -8,6 +8,8 @@ class DB:
 
     def save_file(self, tags: list, file_id: str):
         """Сохраняет данные о фалйе в бд"""
+        for i, tag in enumerate(tags):
+            tags[i] = tag.lower()
         structure_file_data = namedtuple("file_data", ["tags", "file_id"])
         file_data = structure_file_data(tags=tags, file_id=file_id)
         self._files.append(file_data)

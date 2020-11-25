@@ -21,7 +21,6 @@ async def send_welcome(message: types.Message):
     await message.reply("Hi!\nI'm Cool_Storage_Bot!\nPowered by aiogram.")
 
 
-
 @dp.message_handler(content_types=['file', 'photo', 'video', 'document'])
 async def set_file(message: types.Message):
     # logging.INFO()
